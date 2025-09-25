@@ -2,15 +2,23 @@
 
 const store = require('../data/memoryStore');
 
-function connect(apiKey, siteId) {
+function connect(apiKey, siteId, domain) {
   if (!apiKey || !siteId) {
     throw new Error('Hostinger bağlantısı için API anahtarı ve site kimliği gereklidir.');
+  }
+
+  const environment = store.getEnvironment();
+  const mappedDomain = (domain || environment.domain || '').trim().toLowerCase();
+
+  if (!mappedDomain) {
+    throw new Error('Hostinger bağlantısı için alan adı yapılandırması gereklidir.');
   }
 
   return store.setConnection('hostinger', {
     status: 'connected',
     metadata: {
-      siteId
+      siteId,
+      domain: mappedDomain
     }
   });
 }
@@ -28,6 +36,7 @@ function triggerDeployment(target = 'staging') {
   return {
     status: 'deployment_requested',
     target,
+    domain: connection.metadata?.domain || null,
     requestedAt: new Date().toISOString()
   };
 }

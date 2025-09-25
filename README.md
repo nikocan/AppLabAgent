@@ -2,6 +2,8 @@
 
 App Lab Agent, yapay zeka destekli ajan orkestrasyonunu, otomasyonları ve çoklu platform dağıtımını bir arada sunarak ekiplerin fikirden yayınlamaya kadar tüm uygulama yaşam döngüsünü tek bir yerden yönetmesini sağlayan bulut tabanlı bir geliştirme platformudur. Platform, GitHub, Hostinger, n8n, analitik servisleri ve üçüncü parti yapay zeka ajanları gibi farklı hesap ve hizmetleri entegre ederek hem test hem de uygulama geliştirme süreçlerini uçtan uca otomatikleştirir.
 
+Ürün, Hostinger altyapısında barındırılan `applabagent.net` alan adı üzerinden hizmet verir ve alan adı yapılandırması, otomasyon tetikleri ile mobil mağaza yayın akışları tek bir orkestrasyon katmanında toparlanır.
+
 ## Ürün Vizyonu
 
 - **Fikirden mağazaya tek platform:** Ürün keşfi, prototipleme, geliştirme, test, sürümleme ve mağaza yayınlarını aynı çatı altında toplar.
@@ -132,6 +134,9 @@ Varsayılan olarak `http://localhost:4000` adresinde çalışan sunucu aşağıd
 - `POST /api/workflows/:id/attach-task` — İş akışını mevcut ajan görevleriyle ilişkilendirir.
 - `POST /api/workflows/:id/trigger` — İş akışını bağlam verisiyle kuyruğa alarak çalıştırır.
 - `GET /api/workflows` — Kayıtlı iş akışlarının listesini döndürür.
+- `GET /api/environment` — Platformun alan adı, Hostinger bağlantısı ve yayın kanalı özetini döndürür.
+- `POST /api/environment/domain` — Alan adını günceller ve Hostinger bağlantısını `applabagent.net` ile senkronize eder.
+- `POST /api/environment/releases` — Android/iOS/web yayın kanallarını kaydeder.
 
 Tüm uç noktalar JSON isteği kabul eder ve örnek akışları simüle etmek üzere bellek içi durum deposu kullanır.
 

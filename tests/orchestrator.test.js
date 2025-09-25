@@ -50,4 +50,7 @@ test('Ajan görevi kaydı, dispatch ve kuyruk işleme', () => {
   const processed = automationRunner.processNext();
   assert.strictEqual(processed.status, 'processed');
   assert.strictEqual(processed.deploymentTarget, 'staging');
+
+  const deployment = hostingerConnector.triggerDeployment('production');
+  assert.strictEqual(deployment.domain, 'applabagent.net');
 });

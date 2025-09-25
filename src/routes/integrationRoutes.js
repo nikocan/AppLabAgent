@@ -20,8 +20,8 @@ function route({ method, pathname, body }) {
   }
 
   if (method === 'POST' && pathname === '/api/integrations/hostinger/connect') {
-    const { apiKey, siteId } = body || {};
-    return { status: 200, data: hostingerConnector.connect(apiKey, siteId) };
+    const { apiKey, siteId, domain } = body || {};
+    return { status: 200, data: hostingerConnector.connect(apiKey, siteId, domain) };
   }
 
   if (method === 'GET' && pathname === '/api/integrations/hostinger/status') {

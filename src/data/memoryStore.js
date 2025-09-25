@@ -1,11 +1,19 @@
 // App Lab Agent - Basit bellek içi durum deposu; entegrasyon bağlantıları, ajan görevleri,
 // projeler ve otomasyon akışlarını tutar.
 
+const DEFAULT_DOMAIN = 'applabagent.net';
+
 const memoryState = {
   connections: {},
   workflows: {},
   tasks: {},
-  projects: {}
+  projects: {},
+  environment: {
+    domain: DEFAULT_DOMAIN,
+    releaseChannels: {},
+    updatedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString()
+  }
 };
 
 function setConnection(provider, payload) {
@@ -88,11 +96,51 @@ function listProjects() {
   return memoryState.projects;
 }
 
+function getEnvironment() {
+  return memoryState.environment;
+}
+
+function updateEnvironment(updates) {
+  const timestamp = new Date().toISOString();
+  memoryState.environment = {
+    ...memoryState.environment,
+    ...updates,
+    updatedAt: timestamp
+  };
+  if (!memoryState.environment.createdAt) {
+    memoryState.environment.createdAt = timestamp;
+  }
+  return memoryState.environment;
+}
+
+function upsertReleaseChannel(platform, configuration) {
+  const timestamp = new Date().toISOString();
+  const existing = memoryState.environment.releaseChannels[platform];
+
+  memoryState.environment.releaseChannels[platform] = {
+    platform,
+    ...configuration,
+    createdAt: existing?.createdAt || timestamp,
+    updatedAt: timestamp
+  };
+
+  updateEnvironment({});
+
+  return memoryState.environment.releaseChannels[platform];
+}
+
 function reset() {
   memoryState.connections = {};
   memoryState.workflows = {};
   memoryState.tasks = {};
   memoryState.projects = {};
+  const timestamp = new Date().toISOString();
+  memoryState.environment = {
+    domain: DEFAULT_DOMAIN,
+    releaseChannels: {},
+    createdAt: timestamp,
+    updatedAt: timestamp
+  };
 }
 
 module.exports = {
@@ -108,5 +156,8 @@ module.exports = {
   upsertProject,
   getProject,
   listProjects,
+  getEnvironment,
+  updateEnvironment,
+  upsertReleaseChannel,
   reset
 };
