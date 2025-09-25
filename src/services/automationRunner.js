@@ -1,6 +1,11 @@
 // App Lab Agent - Ajan görevlerini n8n iş akışları ve dağıtım tetikleyicilerine kuyruklayan otomasyon yürütücüsü.
 
-const { upsertTask } = require('../data/memoryStore');
+const {
+  upsertTask,
+  getBuild,
+  upsertBuild,
+  appendBuildHistory
+} = require('../data/memoryStore');
 const n8nConnector = require('../connectors/n8nConnector');
 const hostingerConnector = require('../connectors/hostingerConnector');
 
@@ -19,6 +24,34 @@ function processNext() {
   }
 
   const job = inMemoryQueue.shift();
+
+  if (job?.type === 'build') {
+    const { buildId, payload } = job;
+    const build = getBuild(buildId);
+    if (!build) {
+      return null;
+    }
+
+    appendBuildHistory(buildId, {
+      status: 'building',
+      notes: payload?.notes || 'Derleme süreci başladı'
+    });
+    upsertBuild(buildId, {
+      status: 'building'
+    });
+
+    appendBuildHistory(buildId, {
+      status: 'built',
+      notes: payload?.completionNotes || 'Derleme başarıyla tamamlandı'
+    });
+    const artifactUrl =
+      payload?.artifactUrl || `https://cdn.applabagent.net/artifacts/${buildId}.zip`;
+    return upsertBuild(buildId, {
+      status: 'built',
+      artifactUrl
+    });
+  }
+
   const { taskId, definition, context } = job;
 
   const workflowId = definition?.workflowId;

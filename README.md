@@ -137,6 +137,11 @@ Varsayılan olarak `http://localhost:4000` adresinde çalışan sunucu aşağıd
 - `GET /api/environment` — Platformun alan adı, Hostinger bağlantısı ve yayın kanalı özetini döndürür.
 - `POST /api/environment/domain` — Alan adını günceller ve Hostinger bağlantısını `applabagent.net` ile senkronize eder.
 - `POST /api/environment/releases` — Android/iOS/web yayın kanallarını kaydeder.
+- `POST /api/builds` — Bir projenin Android/iOS derleme kaydını oluşturur ve kuyruğa hazırlar.
+- `POST /api/builds/:id/trigger` — Oluşturulan derlemeyi otomasyon kuyruğuna gönderir.
+- `PATCH /api/builds/:id/status` — Derleme durumunu manuel olarak günceller ve geçmişe not ekler.
+- `GET /api/builds` — Derlemeleri proje, platform veya duruma göre filtreler.
+- `GET /api/builds/:id` — Tekil derlemenin durumunu, artefact bağlantısını ve geçmişini döndürür.
 
 Tüm uç noktalar JSON isteği kabul eder ve örnek akışları simüle etmek üzere bellek içi durum deposu kullanır.
 

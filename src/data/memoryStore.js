@@ -8,6 +8,7 @@ const memoryState = {
   workflows: {},
   tasks: {},
   projects: {},
+  builds: {},
   environment: {
     domain: DEFAULT_DOMAIN,
     releaseChannels: {},
@@ -96,6 +97,47 @@ function listProjects() {
   return memoryState.projects;
 }
 
+function upsertBuild(id, build) {
+  const existing = memoryState.builds[id] || {};
+  const timestamp = new Date().toISOString();
+
+  memoryState.builds[id] = {
+    id,
+    createdAt: existing?.createdAt || build?.createdAt || timestamp,
+    history: existing?.history || build?.history || [],
+    ...existing,
+    ...build,
+    updatedAt: timestamp
+  };
+
+  return memoryState.builds[id];
+}
+
+function getBuild(id) {
+  return memoryState.builds[id] || null;
+}
+
+function listBuilds() {
+  return memoryState.builds;
+}
+
+function appendBuildHistory(id, entry) {
+  const build = memoryState.builds[id];
+  if (!build) {
+    return null;
+  }
+
+  const record = {
+    ...entry,
+    timestamp: entry?.timestamp || new Date().toISOString()
+  };
+
+  build.history = [...(build.history || []), record];
+  build.updatedAt = record.timestamp;
+
+  return build;
+}
+
 function getEnvironment() {
   return memoryState.environment;
 }
@@ -134,6 +176,7 @@ function reset() {
   memoryState.workflows = {};
   memoryState.tasks = {};
   memoryState.projects = {};
+  memoryState.builds = {};
   const timestamp = new Date().toISOString();
   memoryState.environment = {
     domain: DEFAULT_DOMAIN,
@@ -156,6 +199,10 @@ module.exports = {
   upsertProject,
   getProject,
   listProjects,
+  upsertBuild,
+  getBuild,
+  listBuilds,
+  appendBuildHistory,
   getEnvironment,
   updateEnvironment,
   upsertReleaseChannel,

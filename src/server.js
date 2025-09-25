@@ -7,6 +7,7 @@ const taskRoutes = require('./routes/taskRoutes');
 const projectRoutes = require('./routes/projectRoutes');
 const workflowRoutes = require('./routes/workflowRoutes');
 const environmentRoutes = require('./routes/environmentRoutes');
+const buildRoutes = require('./routes/buildRoutes');
 
 const PORT = process.env.PORT || 4000;
 
@@ -76,7 +77,8 @@ const server = http.createServer(async (req, res) => {
   const payload = {
     method: req.method,
     pathname: url.pathname,
-    body
+    body,
+    query: Object.fromEntries(url.searchParams.entries())
   };
 
   try {
@@ -85,7 +87,8 @@ const server = http.createServer(async (req, res) => {
       taskRoutes.route,
       projectRoutes.route,
       workflowRoutes.route,
-      environmentRoutes.route
+      environmentRoutes.route,
+      buildRoutes.route
     ];
     for (const handler of handlers) {
       const result = handler(payload);
