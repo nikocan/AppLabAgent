@@ -1,0 +1,18 @@
+{
+  "name": "applabagent",
+  "version": "1.0.0",
+  "description": "App Lab Agent platformu için hafif bir ajan orkestrasyon ve otomasyon sunucusu iskeleti.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "agent",
+    "automation",
+    "orchestration"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs"
+}
