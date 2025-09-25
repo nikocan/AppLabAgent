@@ -142,6 +142,12 @@ Varsayılan olarak `http://localhost:4000` adresinde çalışan sunucu aşağıd
 - `PATCH /api/builds/:id/status` — Derleme durumunu manuel olarak günceller ve geçmişe not ekler.
 - `GET /api/builds` — Derlemeleri proje, platform veya duruma göre filtreler.
 - `GET /api/builds/:id` — Tekil derlemenin durumunu, artefact bağlantısını ve geçmişini döndürür.
+- `POST /api/releases` — Çoklu platform sürüm kaydını oluşturur ve platform varsayılanlarını ayarlar.
+- `GET /api/releases` — Sürüm özetlerini proje bazında listeler.
+- `GET /api/releases/:id` — Seçilen sürümün platform durumları ve tarihçesini döndürür.
+- `POST /api/releases/:id/platforms` — Platforma build bağlar veya mağaza durumunu günceller.
+- `POST /api/releases/:id/promote` — Sürüm durumunu (draft, in_progress, published vb.) değiştirir.
+- `POST /api/releases/:id/timeline` — Serbest metin kilometre taşı mesajlarını sürüm geçmişine ekler.
 
 Tüm uç noktalar JSON isteği kabul eder ve örnek akışları simüle etmek üzere bellek içi durum deposu kullanır.
 

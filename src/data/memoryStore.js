@@ -9,6 +9,7 @@ const memoryState = {
   tasks: {},
   projects: {},
   builds: {},
+  releases: {},
   environment: {
     domain: DEFAULT_DOMAIN,
     releaseChannels: {},
@@ -97,6 +98,116 @@ function listProjects() {
   return memoryState.projects;
 }
 
+function upsertRelease(id, release) {
+  const existing = memoryState.releases[id] || {};
+  const timestamp = new Date().toISOString();
+
+  const mergedPlatforms = { ...existing.platforms };
+  if (release?.platforms) {
+    Object.entries(release.platforms).forEach(([platform, configuration]) => {
+      const current = mergedPlatforms[platform] || {};
+      mergedPlatforms[platform] = {
+        platform,
+        status: configuration?.status || current.status || 'pending',
+        buildId:
+          Object.prototype.hasOwnProperty.call(configuration || {}, 'buildId')
+            ? configuration.buildId
+            : Object.prototype.hasOwnProperty.call(current, 'buildId')
+              ? current.buildId
+              : null,
+        storeStatus: configuration?.storeStatus || current.storeStatus || 'not_submitted',
+        storeId: configuration?.storeId || current.storeId || null,
+        submissionNotes: configuration?.submissionNotes || current.submissionNotes || null,
+        lastSubmissionAt: configuration?.lastSubmissionAt || current.lastSubmissionAt || null,
+        metadata: {
+          ...(current.metadata || {}),
+          ...(configuration?.metadata || {})
+        },
+        createdAt: current.createdAt || configuration?.createdAt || timestamp,
+        updatedAt: timestamp
+      };
+    });
+  }
+
+  memoryState.releases[id] = {
+    id,
+    projectId: release?.projectId ?? existing.projectId ?? null,
+    version: release?.version || existing.version || '0.0.1',
+    status: release?.status || existing.status || 'draft',
+    notes: release?.notes ?? existing.notes ?? '',
+    platforms: mergedPlatforms,
+    history: release?.history || existing.history || [],
+    createdAt: existing.createdAt || release?.createdAt || timestamp,
+    updatedAt: timestamp
+  };
+
+  return memoryState.releases[id];
+}
+
+function getRelease(id) {
+  return memoryState.releases[id] || null;
+}
+
+function listReleases() {
+  return memoryState.releases;
+}
+
+function upsertReleasePlatform(id, platform, updates) {
+  const release = memoryState.releases[id];
+  if (!release) {
+    return null;
+  }
+
+  const timestamp = new Date().toISOString();
+  const existing = release.platforms?.[platform] || {};
+
+  const merged = {
+    platform,
+    status: updates?.status || existing.status || 'pending',
+    buildId:
+      Object.prototype.hasOwnProperty.call(updates || {}, 'buildId')
+        ? updates.buildId
+        : Object.prototype.hasOwnProperty.call(existing, 'buildId')
+          ? existing.buildId
+          : null,
+    storeStatus: updates?.storeStatus || existing.storeStatus || 'not_submitted',
+    storeId: updates?.storeId || existing.storeId || null,
+    submissionNotes: updates?.submissionNotes || existing.submissionNotes || null,
+    lastSubmissionAt: updates?.lastSubmissionAt || existing.lastSubmissionAt || null,
+    metadata: {
+      ...(existing.metadata || {}),
+      ...(updates?.metadata || {})
+    },
+    createdAt: existing.createdAt || timestamp,
+    updatedAt: timestamp
+  };
+
+  release.platforms = {
+    ...(release.platforms || {}),
+    [platform]: merged
+  };
+  release.updatedAt = timestamp;
+
+  return merged;
+}
+
+function appendReleaseHistory(id, entry) {
+  const release = memoryState.releases[id];
+  if (!release) {
+    return null;
+  }
+
+  const record = {
+    ...entry,
+    timestamp: entry?.timestamp || new Date().toISOString()
+  };
+
+  release.history = [...(release.history || []), record];
+  release.updatedAt = record.timestamp;
+
+  return release;
+}
+
 function upsertBuild(id, build) {
   const existing = memoryState.builds[id] || {};
   const timestamp = new Date().toISOString();
@@ -177,6 +288,7 @@ function reset() {
   memoryState.tasks = {};
   memoryState.projects = {};
   memoryState.builds = {};
+  memoryState.releases = {};
   const timestamp = new Date().toISOString();
   memoryState.environment = {
     domain: DEFAULT_DOMAIN,
@@ -199,6 +311,11 @@ module.exports = {
   upsertProject,
   getProject,
   listProjects,
+  upsertRelease,
+  getRelease,
+  listReleases,
+  upsertReleasePlatform,
+  appendReleaseHistory,
   upsertBuild,
   getBuild,
   listBuilds,
