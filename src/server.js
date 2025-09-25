@@ -5,6 +5,7 @@ const { URL } = require('url');
 const integrationRoutes = require('./routes/integrationRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 const projectRoutes = require('./routes/projectRoutes');
+const workflowRoutes = require('./routes/workflowRoutes');
 
 const PORT = process.env.PORT || 4000;
 
@@ -78,7 +79,12 @@ const server = http.createServer(async (req, res) => {
   };
 
   try {
-    const handlers = [integrationRoutes.route, taskRoutes.route, projectRoutes.route];
+    const handlers = [
+      integrationRoutes.route,
+      taskRoutes.route,
+      projectRoutes.route,
+      workflowRoutes.route
+    ];
     for (const handler of handlers) {
       const result = handler(payload);
       if (result) {

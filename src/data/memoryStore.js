@@ -25,10 +25,20 @@ function listConnections() {
 }
 
 function upsertWorkflow(id, definition) {
+  const existing = memoryState.workflows[id];
+  const timestamp = new Date().toISOString();
+
   memoryState.workflows[id] = {
-    ...definition,
-    updatedAt: new Date().toISOString()
+    id,
+    name: definition?.name || existing?.name || 'Yeni Otomasyon',
+    description: definition?.description || existing?.description || '',
+    tasks: definition?.tasks || existing?.tasks || [],
+    definition: definition?.definition || existing?.definition || {},
+    projectId: definition?.projectId || existing?.projectId || null,
+    createdAt: existing?.createdAt || definition?.createdAt || timestamp,
+    updatedAt: timestamp
   };
+
   return memoryState.workflows[id];
 }
 

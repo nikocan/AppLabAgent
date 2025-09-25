@@ -128,6 +128,10 @@ Varsayılan olarak `http://localhost:4000` adresinde çalışan sunucu aşağıd
 - `POST /api/projects/:id/tasks` — Projenin otomasyon görevlerini çalışma politikalarıyla ilişkilendirir.
 - `GET /api/projects` — Kayıtlı tüm projelerin özet listesini döndürür.
 - `GET /api/projects/:id` — Tekil bir projenin ayrıntılı yapılandırmasını getirir.
+- `POST /api/workflows` — Otomasyon iş akışını kaydeder ve proje/ajan bağlamı ile saklar.
+- `POST /api/workflows/:id/attach-task` — İş akışını mevcut ajan görevleriyle ilişkilendirir.
+- `POST /api/workflows/:id/trigger` — İş akışını bağlam verisiyle kuyruğa alarak çalıştırır.
+- `GET /api/workflows` — Kayıtlı iş akışlarının listesini döndürür.
 
 Tüm uç noktalar JSON isteği kabul eder ve örnek akışları simüle etmek üzere bellek içi durum deposu kullanır.
 

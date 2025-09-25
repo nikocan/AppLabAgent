@@ -12,6 +12,7 @@ const automationRunner = require('../src/services/automationRunner');
 
 test.beforeEach(() => {
   store.reset();
+  automationRunner.resetQueue();
 });
 
 test('GitHub entegrasyon bağlantısı durumu', () => {

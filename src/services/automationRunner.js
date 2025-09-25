@@ -44,8 +44,13 @@ function pendingJobs() {
   return [...inMemoryQueue];
 }
 
+function resetQueue() {
+  inMemoryQueue.splice(0, inMemoryQueue.length);
+}
+
 module.exports = {
   enqueue,
   processNext,
-  pendingJobs
+  pendingJobs,
+  resetQueue
 };
