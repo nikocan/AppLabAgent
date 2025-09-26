@@ -159,6 +159,8 @@ Varsayılan olarak `http://localhost:4000` adresinde çalışan sunucu aşağıd
 - `POST /api/pipeline/execute` — Oluşturulan planı çalıştırır, derlemeleri kuyruğa alır, sürümü terfi ettirir ve isteğe bağlı dağıtımı tetikler.
 - `GET /api/pipeline/runs` — Kaydedilen pipeline yürütmelerinin özetini güncel zamana göre sıralı döndürür.
 - `GET /api/pipeline/runs/detail?id=` — Belirli bir pipeline kaydının entegrasyon, sürüm ve dağıtım adımlarını gösterir.
+- `GET /api/status/summary` — Tüm entegrasyon, proje, derleme ve sürüm kayıtlarının tek bir durumda özetini verir.
+- `GET /api/status/recent-activity?limit=` — En güncel pipeline, sürüm, derleme ve ajan etkinliklerini limit parametresiyle sıralar.
 
 Tüm uç noktalar JSON isteği kabul eder ve örnek akışları simüle etmek üzere bellek içi durum deposu kullanır.
 

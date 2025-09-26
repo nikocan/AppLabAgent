@@ -11,6 +11,7 @@ const environmentRoutes = require('./routes/environmentRoutes');
 const buildRoutes = require('./routes/buildRoutes');
 const releaseRoutes = require('./routes/releaseRoutes');
 const pipelineRoutes = require('./routes/pipelineRoutes');
+const statusRoutes = require('./routes/statusRoutes');
 
 const PORT = process.env.PORT || 4000;
 
@@ -94,7 +95,8 @@ const server = http.createServer(async (req, res) => {
       environmentRoutes.route,
       buildRoutes.route,
       releaseRoutes.route,
-      pipelineRoutes.route
+      pipelineRoutes.route,
+      statusRoutes.route
     ];
     for (const handler of handlers) {
       const result = await handler(payload);
