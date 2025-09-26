@@ -4,7 +4,7 @@ const githubConnector = require('../connectors/githubConnector');
 const hostingerConnector = require('../connectors/hostingerConnector');
 const n8nConnector = require('../connectors/n8nConnector');
 
-function route({ method, pathname, body }) {
+async function route({ method, pathname, body, query }) {
   if (method === 'POST' && pathname === '/api/integrations/github/connect') {
     const { token, repo, organization } = body || {};
     const connection = githubConnector.connect(token, { repo, organization });
@@ -31,6 +31,15 @@ function route({ method, pathname, body }) {
   if (method === 'POST' && pathname === '/api/integrations/hostinger/deploy') {
     const { target } = body || {};
     return { status: 200, data: hostingerConnector.triggerDeployment(target) };
+  }
+
+  if (method === 'GET' && pathname === '/api/integrations/hostinger/virtual-machines') {
+    const page = query?.page ? Number.parseInt(query.page, 10) : undefined;
+    const result = await hostingerConnector.listVirtualMachines({
+      apiKey: query?.apiKey,
+      page: Number.isFinite(page) && page > 0 ? page : 1
+    });
+    return { status: 200, data: result };
   }
 
   if (method === 'POST' && pathname === '/api/integrations/n8n/connect') {

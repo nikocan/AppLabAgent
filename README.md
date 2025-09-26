@@ -121,6 +121,7 @@ Varsayılan olarak `http://localhost:4000` adresinde çalışan sunucu aşağıd
 
 - `POST /api/integrations/github/connect` — GitHub bağlantısını kaydeder.
 - `POST /api/integrations/hostinger/deploy` — Hostinger üzerinde yayın tetikler.
+- `GET /api/integrations/hostinger/virtual-machines` — Hostinger VPS envanterini canlı API üzerinden çeker.
 - `POST /api/integrations/n8n/trigger` — n8n iş akışını simüle eder.
 - `POST /api/tasks` — Ajan görevini kaydeder.
 - `POST /api/tasks/:id/dispatch` — Görevi kuyruğa alır.
@@ -206,3 +207,5 @@ npm test
 ---
 
 App Lab Agent, geliştiricilerin ve ürün ekiplerinin üretkenliğini artırmak için oluşturulmuş modern ve güvenli bir platformdur. Bu depo, platform mimarisini, otomasyon stratejilerini ve uçtan uca yayın sürecini belgelemek için kullanılacaktır.
+
+Hostinger API çağrıları varsayılan olarak `https://developers.hostinger.com` taban adresini kullanır; farklı ortamlarda `HOSTINGER_API_BASE_URL` ortam değişkeniyle özelleştirilebilir ve isteklerde `apiKey` sorgu parametresi gönderilmediğinde kayıtlı bağlantıdaki anahtar kullanılır.

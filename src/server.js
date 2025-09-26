@@ -97,7 +97,7 @@ const server = http.createServer(async (req, res) => {
       pipelineRoutes.route
     ];
     for (const handler of handlers) {
-      const result = handler(payload);
+      const result = await handler(payload);
       if (result) {
         return sendJson(res, result.status, result.data);
       }
