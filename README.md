@@ -154,8 +154,39 @@ Varsayılan olarak `http://localhost:4000` adresinde çalışan sunucu aşağıd
 - `POST /api/releases/:id/platforms` — Platforma build bağlar veya mağaza durumunu günceller.
 - `POST /api/releases/:id/promote` — Sürüm durumunu (draft, in_progress, published vb.) değiştirir.
 - `POST /api/releases/:id/timeline` — Serbest metin kilometre taşı mesajlarını sürüm geçmişine ekler.
+- `POST /api/pipeline/plan` — GitHub, Hostinger ve n8n entegrasyonlarını doğrulayarak çok platformlu bir dağıtım planı oluşturur.
+- `POST /api/pipeline/execute` — Oluşturulan planı çalıştırır, derlemeleri kuyruğa alır, sürümü terfi ettirir ve isteğe bağlı dağıtımı tetikler.
+- `GET /api/pipeline/runs` — Kaydedilen pipeline yürütmelerinin özetini güncel zamana göre sıralı döndürür.
+- `GET /api/pipeline/runs/detail?id=` — Belirli bir pipeline kaydının entegrasyon, sürüm ve dağıtım adımlarını gösterir.
 
 Tüm uç noktalar JSON isteği kabul eder ve örnek akışları simüle etmek üzere bellek içi durum deposu kullanır.
+
+#### Pipeline orkestrasyonu
+
+Pipeline uç noktaları, tek bir çağrıyla projenin derleme, sürüm ve dağıtım adımlarını uçtan uca simüle etmeye yardımcı olur:
+
+```bash
+curl -X POST http://localhost:4000/api/pipeline/execute \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "projectId": "mobile-suite",
+        "version": "2.1.0",
+        "platforms": ["android", "ios", "web"],
+        "autoDeploy": true,
+        "deploymentTarget": "production",
+        "automationWorkflowId": "ops-notify"
+      }'
+```
+
+Bu çağrı aşağıdaki adımları gerçekleştirir:
+
+1. GitHub, Hostinger ve n8n bağlantılarının aktif olduğunu doğrular.
+2. Her platform için derleme kaydı oluşturur ve sürümle ilişkilendirir.
+3. Derlemeleri kuyruğa alır, otomasyon kuyruğunu boşaltarak artefact URL’lerini üretir.
+4. Sürüm durumunu `in_review` seviyesine terfi ettirir ve mağaza durumlarını günceller.
+5. Hostinger dağıtımını `production` ortamına tetikler ve n8n iş akışıyla operasyon ekibini bilgilendirir.
+
+`GET /api/pipeline/runs` çağrısı ile pipeline geçmişini, `GET /api/pipeline/runs/detail?id=pipeline_...` ile tekil yürütmenin ayrıntılarını görüntüleyebilirsiniz.
 
 ### Testleri Çalıştırma
 

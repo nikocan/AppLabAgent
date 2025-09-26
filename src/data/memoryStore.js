@@ -11,6 +11,7 @@ const memoryState = {
   aiAgents: {},
   builds: {},
   releases: {},
+  pipelineRuns: {},
   environment: {
     domain: DEFAULT_DOMAIN,
     releaseChannels: {},
@@ -347,6 +348,36 @@ function upsertReleaseChannel(platform, configuration) {
   return memoryState.environment.releaseChannels[platform];
 }
 
+// Pipeline yürütme kayıtlarını saklayan yardımcı.
+function upsertPipelineRun(id, run = {}) {
+  if (!id) {
+    throw new Error('Pipeline kaydı için kimlik gereklidir.');
+  }
+
+  const timestamp = new Date().toISOString();
+  const existing = memoryState.pipelineRuns[id] || {};
+
+  memoryState.pipelineRuns[id] = {
+    id,
+    createdAt: existing?.createdAt || run?.createdAt || timestamp,
+    ...existing,
+    ...run,
+    updatedAt: timestamp
+  };
+
+  return memoryState.pipelineRuns[id];
+}
+
+// Pipeline yürütme kaydını döndüren yardımcı.
+function getPipelineRun(id) {
+  return memoryState.pipelineRuns[id] || null;
+}
+
+// Pipeline yürütmelerinin tamamını listeleyen yardımcı.
+function listPipelineRuns() {
+  return memoryState.pipelineRuns;
+}
+
 // Test senaryoları için bellek durumunu sıfırlayan yardımcı.
 function reset() {
   memoryState.connections = {};
@@ -356,6 +387,7 @@ function reset() {
   memoryState.aiAgents = {};
   memoryState.builds = {};
   memoryState.releases = {};
+  memoryState.pipelineRuns = {};
   const timestamp = new Date().toISOString();
   memoryState.environment = {
     domain: DEFAULT_DOMAIN,
@@ -395,5 +427,8 @@ module.exports = {
   getEnvironment,
   updateEnvironment,
   upsertReleaseChannel,
+  upsertPipelineRun,
+  getPipelineRun,
+  listPipelineRuns,
   reset
 };
