@@ -57,6 +57,11 @@ Bu doküman, App Lab Agent platformunun yüksek seviyeli teknik mimarisini ve te
 - Prompt yönetimi ve sürümleme için özel depo
 - Erişim kontrolleri: Her ajan için scoped API anahtarları
 
+### Ajan Profili Kaydı
+- Ajan metadata deposu: sağlayıcı, model, talimat ve yetenek setleri.
+- Proje bazlı ilişkilendirme ve görev önceliklendirme bilgileri.
+- REST API ile CRUD işlemleri, orchestrator cache senkronizasyonu.
+
 ### Workflow Motoru
 - n8n node’ları: GitHub, Hostinger, Slack, Jira, Linear, Notion
 - İnsan-in-the-loop (HITL) adımları için manuel onay modülü

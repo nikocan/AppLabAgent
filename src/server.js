@@ -5,6 +5,7 @@ const { URL } = require('url');
 const integrationRoutes = require('./routes/integrationRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 const projectRoutes = require('./routes/projectRoutes');
+const agentProfileRoutes = require('./routes/agentProfileRoutes');
 const workflowRoutes = require('./routes/workflowRoutes');
 const environmentRoutes = require('./routes/environmentRoutes');
 const buildRoutes = require('./routes/buildRoutes');
@@ -85,6 +86,7 @@ const server = http.createServer(async (req, res) => {
   try {
     const handlers = [
       integrationRoutes.route,
+      agentProfileRoutes.route,
       taskRoutes.route,
       projectRoutes.route,
       workflowRoutes.route,

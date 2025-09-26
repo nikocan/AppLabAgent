@@ -125,6 +125,12 @@ Varsayılan olarak `http://localhost:4000` adresinde çalışan sunucu aşağıd
 - `POST /api/tasks` — Ajan görevini kaydeder.
 - `POST /api/tasks/:id/dispatch` — Görevi kuyruğa alır.
 - `POST /api/queue/process` — Kuyruktaki ilk görevi işleyerek n8n ve Hostinger tetiklerini çalıştırır.
+- `POST /api/agents` — Yapay zeka ajan profilini oluşturur ve varsayılan yetenekleri kaydeder.
+- `GET /api/agents` — Kayıtlı ajan profillerini proje filtresiyle birlikte döndürür.
+- `GET /api/agents/:id` — Tek bir ajan profilinin sağlayıcı, model ve talimat detaylarını getirir.
+- `PATCH /api/agents/:id` — Ajan profilinin yeteneklerini veya talimatlarını günceller.
+- `POST /api/agents/:id/link` — Ajanı belirli bir projeye bağlar ve görev havuzunda önceliklendirir.
+- `DELETE /api/agents/:id` — Ajan profilini ve ilişkili meta veriyi kaldırır.
 - `POST /api/projects` — Yeni bir proje kaydı oluşturur ve açıklama ekler.
 - `POST /api/projects/:id/integrations` — Projeyi GitHub, Hostinger, n8n gibi entegrasyonlara bağlar.
 - `POST /api/projects/:id/tasks` — Projenin otomasyon görevlerini çalışma politikalarıyla ilişkilendirir.

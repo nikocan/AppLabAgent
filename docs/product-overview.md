@@ -14,6 +14,7 @@ App Lab Agent, uygulama geliştirme ekiplerinin fikir, tasarım, geliştirme, te
 
 - **Tek noktadan yönetim:** Çoklu servis bağlantıları tek panelden kontrol edilir.
 - **Özelleştirilebilir ajanlar:** Görev bazlı davranış kuralları ve yetkilendirme seviyeleri tanımlanabilir.
+- **Ajan profili kitaplığı:** Proje bazlı ajan atamaları, rol şablonları ve talimat havuzları tek merkezden yönetilir.
 - **Hızlı prototipleme:** Hazır şablonlar ve kod üretim ajanlarıyla MVP süreleri kısalır.
 - **Sürekli test:** Cihaz çiftliği entegrasyonları sayesinde regresyon süreçleri hızlanır.
 - **Otomatik yayın:** Google Play, App Store, Hostinger ortamları tek tıklamayla güncellenir.

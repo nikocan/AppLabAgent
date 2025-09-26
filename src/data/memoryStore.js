@@ -8,6 +8,7 @@ const memoryState = {
   workflows: {},
   tasks: {},
   projects: {},
+  aiAgents: {},
   builds: {},
   releases: {},
   environment: {
@@ -96,6 +97,70 @@ function getProject(id) {
 
 function listProjects() {
   return memoryState.projects;
+}
+
+// Yapay zeka ajan profillerini kaydeden ve güncelleyen yardımcı.
+function upsertAgentProfile(id, agent) {
+  const existing = memoryState.aiAgents[id] || {};
+  const timestamp = new Date().toISOString();
+
+  memoryState.aiAgents[id] = {
+    id,
+    name: agent?.name || existing.name || 'Yeni Ajan',
+    description: agent?.description ?? existing.description ?? '',
+    provider: agent?.provider || existing.provider || 'openai',
+    model: agent?.model || existing.model || 'gpt-4.1',
+    instructions: agent?.instructions || existing.instructions || '',
+    capabilities: Array.isArray(agent?.capabilities)
+      ? agent.capabilities
+      : existing.capabilities || [],
+    metadata: {
+      ...(existing.metadata || {}),
+      ...(agent?.metadata || {})
+    },
+    projectId:
+      Object.prototype.hasOwnProperty.call(agent || {}, 'projectId')
+        ? agent.projectId
+        : Object.prototype.hasOwnProperty.call(existing, 'projectId')
+          ? existing.projectId
+          : null,
+    createdAt: existing.createdAt || agent?.createdAt || timestamp,
+    updatedAt: timestamp
+  };
+
+  return memoryState.aiAgents[id];
+}
+
+// Belirli bir ajan profilini döndüren yardımcı.
+function getAgentProfile(id) {
+  return memoryState.aiAgents[id] || null;
+}
+
+// Ajan profillerinin tamamını döndüren yardımcı.
+function listAgentProfiles() {
+  return memoryState.aiAgents;
+}
+
+// Bir ajan profilini proje ile ilişkilendiren yardımcı.
+function linkAgentToProject(agentId, projectId) {
+  const agent = memoryState.aiAgents[agentId];
+  if (!agent) {
+    return null;
+  }
+
+  agent.projectId = projectId;
+  agent.updatedAt = new Date().toISOString();
+  return agent;
+}
+
+// Bir ajan profilini silen yardımcı.
+function deleteAgentProfile(agentId) {
+  if (!memoryState.aiAgents[agentId]) {
+    return false;
+  }
+
+  delete memoryState.aiAgents[agentId];
+  return true;
 }
 
 function upsertRelease(id, release) {
@@ -282,11 +347,13 @@ function upsertReleaseChannel(platform, configuration) {
   return memoryState.environment.releaseChannels[platform];
 }
 
+// Test senaryoları için bellek durumunu sıfırlayan yardımcı.
 function reset() {
   memoryState.connections = {};
   memoryState.workflows = {};
   memoryState.tasks = {};
   memoryState.projects = {};
+  memoryState.aiAgents = {};
   memoryState.builds = {};
   memoryState.releases = {};
   const timestamp = new Date().toISOString();
@@ -311,6 +378,11 @@ module.exports = {
   upsertProject,
   getProject,
   listProjects,
+  upsertAgentProfile,
+  getAgentProfile,
+  listAgentProfiles,
+  linkAgentToProject,
+  deleteAgentProfile,
   upsertRelease,
   getRelease,
   listReleases,
