@@ -1,0 +1,42 @@
+{
+  "name": "applabagent",
+  "version": "1.0.0",
+  "description": "App Lab Agent platformu için hafif bir ajan orkestrasyon ve otomasyon sunucusu iskeleti.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "concurrently \"npm:start:backend\" \"npm:start:frontend\"",
+    "start:backend": "node src/server.js",
+    "start:frontend": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm:start:backend\" \"npm:start:frontend\"",
+    "build": "cd frontend && npm run build",
+    "test": "node --test",
+    "lint": "cd frontend && npm run lint"
+  },
+  "keywords": [
+    "agent",
+    "automation",
+    "orchestration"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.16.2",
+    "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "axios": "^1.12.2",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.16.3",
+    "prisma": "^6.16.2"
+  }
+}
