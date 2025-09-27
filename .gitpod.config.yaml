@@ -1,0 +1,58 @@
+# This file contains default settings that will be included in every workspace created on Gitpod.
+# You can learn more about workspace settings at: https://www.gitpod.io/docs/config-gitpod-file
+
+workspaceLocation: /workspace/AppLabAgent
+
+tasks:
+  - name: Frontend Development Server
+    init: |
+      cd frontend
+      npm install
+    command: |
+      npm run dev
+
+  - name: Backend Development Server
+    init: |
+      cd src
+      npm install
+    command: |
+      npm run dev
+
+  - name: Terminal
+    command: |
+      echo "Welcome to AppLabAgent Development Environment"
+      echo "Frontend server running on port 3000"
+      echo "Backend server running on port 3001"
+
+ports:
+  - port: 3000
+    onOpen: open-preview
+    visibility: public
+  - port: 3001
+    onOpen: ignore
+    visibility: private
+
+vscode:
+  extensions:
+    - dbaeumer.vscode-eslint
+    - esbenp.prettier-vscode
+    - dsznajder.es7-react-js-snippets
+    - bradlc.vscode-tailwindcss
+    - ms-vscode.vscode-typescript-next
+    - christian-kohler.path-intellisense
+    - formulahendry.auto-rename-tag
+    - eamodio.gitlens
+    - github.copilot
+
+github:
+  prebuilds:
+    # enable for all branches in this repo
+    branches: true
+    # enable for pull requests coming from this repo
+    pullRequests: true
+    # enable for pull requests coming from forks
+    pullRequestsFromForks: true
+    # add a check to pull requests
+    addCheck: true
+    # add a "Review in Gitpod" button as a comment to pull requests
+    addComment: true

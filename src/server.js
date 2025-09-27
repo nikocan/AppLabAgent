@@ -108,10 +108,41 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
+const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const { createTables } = require('./data/database.js');
+const userRoutes = require('./routes/userRoutes.js');
+const aiRoutes = require('./routes/aiRoutes.js');
+
 if (require.main === module) {
+  dotenv.config();
+
+  const app = express();
+  app.use(cors());
+  app.use(express.json());
+
+  // Veritabanı tablolarını oluştur
+  createTables().catch(console.error);
+
+  // Routes
+  app.use('/api/user', userRoutes);
+  app.use('/api/ai', aiRoutes);
+
+  // Error handler
+  app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Something went wrong!' });
+  });
+
+  const EXPRESS_PORT = process.env.PORT || 3000;
+  app.listen(EXPRESS_PORT, () => {
+    console.log(`AppLab Agent platformu ${EXPRESS_PORT} portunda çalışıyor...`);
+  });
+
   server.listen(PORT, () => {
     // eslint-disable-next-line no-console
-    console.log(`App Lab Agent sunucusu ${PORT} portunda çalışıyor.`);
+    console.log(`HTTP sunucusu ${PORT} portunda çalışıyor...`);
   });
 }
 

@@ -1,0 +1,36 @@
+image:
+  file: .gitpod.Dockerfile
+
+ports:
+  - port: 3000
+    onOpen: open-preview
+    visibility: public
+  - port: 3001
+    onOpen: ignore
+    visibility: private
+
+tasks:
+  - init: |
+      cd frontend
+      npm install
+    command: |
+      cd frontend
+      npm run dev
+  - init: |
+      cd src
+      npm install
+    command: |
+      cd src
+      npm run dev
+
+vscode:
+  extensions:
+    - dbaeumer.vscode-eslint
+    - esbenp.prettier-vscode
+    - dsznajder.es7-react-js-snippets
+    - bradlc.vscode-tailwindcss
+    - ms-vscode.vscode-typescript-next
+    - christian-kohler.path-intellisense
+    - formulahendry.auto-rename-tag
+    - eamodio.gitlens
+    - github.copilot

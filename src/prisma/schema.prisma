@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Kullanıcı modeli
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  password      String
+  role          UserRole  @default(USER)
+  projects      Project[]
+  tasks         Task[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+enum UserRole {
+  ADMIN
+  USER
+  DEVELOPER
+}
+
+// Proje modeli
+model Project {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  status      ProjectStatus @default(ACTIVE)
+  creator     User      @relation(fields: [creatorId], references: [id])
+  creatorId   String
+  tasks       Task[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  startDate   DateTime?
+  endDate     DateTime?
+  technology  String[]
+  repository  String?
+}
+
+enum ProjectStatus {
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+  ON_HOLD
+}
+
+// Görev modeli
+model Task {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  status      TaskStatus @default(TODO)
+  priority    Priority   @default(MEDIUM)
+  project     Project   @relation(fields: [projectId], references: [id])
+  projectId   String
+  assignee    User      @relation(fields: [assigneeId], references: [id])
+  assigneeId  String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  dueDate     DateTime?
+  tags        String[]
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  REVIEW
+  DONE
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+// AI Asistan İnteraksiyon Modeli
+model AIInteraction {
+  id          String    @id @default(cuid())
+  query       String
+  response    String
+  context     Json?
+  createdAt   DateTime  @default(now())
+  metadata    Json?
+}

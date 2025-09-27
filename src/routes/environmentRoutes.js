@@ -3,21 +3,27 @@
 const environmentService = require('../services/environmentService');
 
 function route({ method, pathname, body }) {
-  if (method === 'GET' && pathname === '/api/environment') {
-    return { status: 200, data: environmentService.getEnvironmentSnapshot() };
-  }
+  try {
+    if (method === 'GET' && pathname === '/api/environment') {
+      return { status: 200, data: environmentService.getEnvironmentSnapshot() };
+    }
 
-  if (method === 'POST' && pathname === '/api/environment/domain') {
-    const { domain } = body || {};
-    return { status: 200, data: environmentService.updateDomain(domain) };
-  }
+    if (method === 'POST' && pathname === '/api/environment/domain') {
+      const { domain } = body || {};
+      const result = environmentService.updateDomain(domain);
+      return { status: 200, data: result };
+    }
 
-  if (method === 'POST' && pathname === '/api/environment/releases') {
-    const { platform, configuration } = body || {};
-    return { status: 200, data: environmentService.registerReleaseChannel(platform, configuration) };
-  }
+    if (method === 'POST' && pathname === '/api/environment/releases') {
+      const { platform, configuration } = body || {};
+      const result = environmentService.registerReleaseChannel(platform, configuration);
+      return { status: 200, data: result };
+    }
 
-  return null;
+    return null;
+  } catch (error) {
+    return { status: 500, data: { error: error.message || 'Sunucu hatası.' } };
+  }
 }
 
 module.exports = { route };
