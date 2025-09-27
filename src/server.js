@@ -117,9 +117,8 @@ const server = http.createServer(async (req, res) => {
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const { createTables } = require('./data/database.js');
-const userRoutes = require('./routes/userRoutes.js');
-const aiRoutes = require('./routes/aiRoutes.js');
+const userRoutes = require('./routes/userRoutesNew.js');
+const aiRoutes = require('./routes/aiRoutesNew.js');
 
 if (require.main === module) {
   dotenv.config();
@@ -128,8 +127,14 @@ if (require.main === module) {
   app.use(cors());
   app.use(express.json());
 
-  // Veritabanı tablolarını oluştur
-  createTables().catch(console.error);
+  // Health check
+  app.get('/health', (req, res) => {
+    res.json({ 
+      status: 'ok', 
+      timestamp: new Date().toISOString(),
+      version: '1.0.0'
+    });
+  });
 
   // Routes
   app.use('/api/user', userRoutes);
@@ -138,17 +143,22 @@ if (require.main === module) {
   // Error handler
   app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).json({ error: 'Something went wrong!' });
+    res.status(500).json({ 
+      success: false,
+      error: 'Something went wrong!',
+      timestamp: new Date().toISOString()
+    });
   });
 
   const EXPRESS_PORT = process.env.PORT || 3000;
   app.listen(EXPRESS_PORT, () => {
-    console.log(`AppLab Agent platformu ${EXPRESS_PORT} portunda çalışıyor...`);
+    console.log(`🚀 AppLab Agent platformu ${EXPRESS_PORT} portunda çalışıyor...`);
+    console.log(`📊 Dashboard: http://localhost:${EXPRESS_PORT}`);
+    console.log(`📚 API Health: http://localhost:${EXPRESS_PORT}/health`);
   });
 
   server.listen(PORT, () => {
-    // eslint-disable-next-line no-console
-    console.log(`HTTP sunucusu ${PORT} portunda çalışıyor...`);
+    console.log(`🔧 HTTP sunucusu ${PORT} portunda çalışıyor...`);
   });
 }
 
