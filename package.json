@@ -1,0 +1,21 @@
+{
+  "name": "applabagent",
+  "version": "1.0.0",
+  "description": "App Lab Agent bir yapay zeka ajanlarını kullnarak insanların hem test hem uygulama yapabilecekleri hesapları baglayıp github hostinger n8n otomasyanlarını ve diğe ryapay zeka ajanlarını kullanıp uygulama cıkarbilecekleri bir uygulama geliştirme firmasına ait ve domain hosting ve kendi uygulamalarını geliştirdikleri bir uygulama",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0",
+    "supertest": "^7.1.4"
+  }
+}
